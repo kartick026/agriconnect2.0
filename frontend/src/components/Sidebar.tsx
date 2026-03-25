@@ -63,7 +63,7 @@ export default function Sidebar() {
                     </button>
                 </div>
 
-                <div className="text-xs font-bold text-[#004d2b]/60 uppercase tracking-widest mb-4 px-3 mt-2 md:mt-4">Applications</div>
+                <div className="text-xs font-bold text-[#004d2b]/60 uppercase tracking-widest mb-4 px-3 mt-2 md:mt-4">{t('Applications') || 'Applications'}</div>
                 <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
                     {links.map((link) => {
                         const isActive = pathname === link.href;
@@ -90,7 +90,7 @@ export default function Sidebar() {
                         </div>
                         <div>
                             <h4 className="text-sm font-black text-white tracking-wide">{t('Chat') || 'AgriBot AI'}</h4>
-                            <p className="text-[11px] text-[#a4e320] mt-0.5 font-bold uppercase tracking-wider">Voice Assisted</p>
+                            <p className="text-[11px] text-[#a4e320] mt-0.5 font-bold uppercase tracking-wider">{t('VoiceAssisted') || 'Voice Assisted'}</p>
                         </div>
                     </div>
                 </Link>

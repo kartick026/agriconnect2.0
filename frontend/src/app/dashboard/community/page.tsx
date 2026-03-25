@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users, MessageSquare, Heart, Share2, Image as ImageIcon, ThumbsUp, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const POSTS = [
     {
@@ -43,6 +44,7 @@ const POSTS = [
 ];
 
 export default function CommunityForum() {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('Feed');
 
     return (
@@ -53,20 +55,20 @@ export default function CommunityForum() {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#004d2b] via-[#004d2b]/80 to-transparent flex flex-col justify-center px-8 md:px-12 backdrop-blur-sm">
                     <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight flex items-center mb-2">
                         <Users className="w-8 h-8 md:w-12 md:h-12 mr-4 text-[#a4e320]" />
-                        Farmers Community
+                        {t('FarmersCommunity') || 'Farmers Community'}
                     </h1>
-                    <p className="text-white/80 font-medium max-w-md text-sm md:text-base">Ask experts, share success stories, and connect with nearby farmers in an exclusive network.</p>
+                    <p className="text-white/80 font-medium max-w-md text-sm md:text-base">{t('CommunityDesc') || 'Ask experts, share success stories, and connect with nearby farmers in an exclusive network.'}</p>
                 </div>
             </div>
 
             <div className="flex gap-4 border-b border-[#004d2b]/10 pb-2 overflow-x-auto">
-                {['Feed', 'Ask Expert', 'My Requests'].map(tab => (
+                {[{key: 'Feed', label: 'Feed'}, {key: 'AskExpert', label: 'Ask Expert'}, {key: 'MyRequests', label: 'My Requests'}].map(tab => (
                     <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 font-bold transition-all border-b-2 whitespace-nowrap ${activeTab === tab ? 'text-[#004d2b] border-[#004d2b]' : 'text-[#004d2b]/40 border-transparent hover:text-[#004d2b]/70'}`}
+                        key={tab.key}
+                        onClick={() => setActiveTab(tab.key)}
+                        className={`px-4 py-2 font-bold transition-all border-b-2 whitespace-nowrap ${activeTab === tab.key ? 'text-[#004d2b] border-[#004d2b]' : 'text-[#004d2b]/40 border-transparent hover:text-[#004d2b]/70'}`}
                     >
-                        {tab}
+                        {t(tab.key) || tab.label}
                     </button>
                 ))}
             </div>
@@ -79,15 +81,15 @@ export default function CommunityForum() {
                 <div className="flex-1">
                     <textarea
                         className="w-full bg-[#f0f4eb] border border-transparent rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-[#004d2b]/20 resize-none text-[#004d2b] font-medium placeholder-[#004d2b]/40"
-                        placeholder="What's happening on your farm? Ask a question or share a photo..."
+                        placeholder={t('PostPlaceholder') || "What's happening on your farm? Ask a question or share a photo..."}
                         rows={3}
                     />
                     <div className="flex justify-between items-center mt-3">
                         <button className="text-[#004d2b]/60 hover:text-[#004d2b] flex items-center text-sm font-bold transition cursor-pointer bg-[#f0f4eb] px-4 py-2 rounded-xl">
-                            <ImageIcon className="w-4 h-4 mr-2" /> Add Photo
+                            <ImageIcon className="w-4 h-4 mr-2" /> {t('AddPhoto') || 'Add Photo'}
                         </button>
                         <button onClick={() => alert('Post creation initiated!')} className="px-6 py-2.5 bg-[#004d2b] text-[#a4e320] font-bold rounded-xl shadow-md hover:bg-[#003b20] transition">
-                            Post Update
+                            {t('PostUpdate') || 'Post Update'}
                         </button>
                     </div>
                 </div>
