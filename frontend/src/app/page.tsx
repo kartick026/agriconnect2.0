@@ -2,10 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { MoveRight, Sprout, Play } from "lucide-react";
-import Hero3D from "@/components/Hero3D";
-import FlowingMenu from "@/components/FlowingMenu";
-import { ScrollVelocity } from "@/components/ScrollVelocity";
+
+const Hero3D = dynamic(() => import("@/components/Hero3D"), { ssr: false });
+const FlowingMenu = dynamic(() => import("@/components/FlowingMenu"), { ssr: false });
+const ScrollVelocity = dynamic(() => import("@/components/ScrollVelocity").then(mod => ({ default: mod.ScrollVelocity })), { ssr: false });
 
 const blogItems = [
   { link: '#', text: 'Cultivating Success by Breaking Stereotypes', image: '/images/blog_1.png' },

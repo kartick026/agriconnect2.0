@@ -33,6 +33,7 @@ app.use(limiter);
 // CORS – allow requests from the frontend origin
 const allowedOrigins = [
     'http://localhost:3000',
+    'https://agriconnect2-0-38pk.onrender.com',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 

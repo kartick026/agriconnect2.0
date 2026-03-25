@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Tractor, Snowflake, MapPin, Phone, Calendar as CalendarIcon, Filter, Search } from 'lucide-react';
 
@@ -53,7 +54,7 @@ export default function EquipmentColdStorage() {
                             <div className={`absolute top-4 right-4 z-10 px-3 py-1 rounded-xl text-xs font-bold backdrop-blur-md ${item.type === 'Cold Storage' ? 'bg-[#004d2b] text-white' : 'bg-[#a4e320] text-[#004d2b]'}`}>
                                 {item.type}
                             </div>
-                            <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <Image src={item.img} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                         </div>
                         <div className="p-5 flex-1 flex flex-col">
                             <div className="flex justify-between items-start mb-2">

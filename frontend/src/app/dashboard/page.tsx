@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { TrendingUp, TrendingDown, IndianRupee, BellRing } from 'lucide-react';
@@ -13,7 +14,8 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts';
-import { ScrollVelocity } from '@/components/ScrollVelocity';
+
+const ScrollVelocity = dynamic(() => import('@/components/ScrollVelocity').then(mod => ({ default: mod.ScrollVelocity })), { ssr: false });
 
 const dummyData = [
     { name: 'Mon', price: 2100 },

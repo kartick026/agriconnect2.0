@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Users, MessageSquare, Heart, Share2, Image as ImageIcon, ThumbsUp, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -51,7 +52,7 @@ export default function CommunityForum() {
         <div className="max-w-4xl mx-auto space-y-6">
             {/* Banner Image Section */}
             <div className="relative w-full h-48 md:h-64 rounded-3xl overflow-hidden shadow-xl border border-[#004d2b]/10 mb-8">
-                <img src="/images/community_banner.png" alt="Farmers Community" className="w-full h-full object-cover" />
+                <Image src="/images/community_banner.png" alt="Farmers Community" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#004d2b] via-[#004d2b]/80 to-transparent flex flex-col justify-center px-8 md:px-12 backdrop-blur-sm">
                     <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight flex items-center mb-2">
                         <Users className="w-8 h-8 md:w-12 md:h-12 mr-4 text-[#a4e320]" />
@@ -108,7 +109,9 @@ export default function CommunityForum() {
                         {/* Header */}
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex items-center gap-4">
-                                <img src={post.avatar} alt={post.author} className="w-12 h-12 rounded-full object-cover border-2 border-[#f0f4eb]" />
+                                <div className="w-12 h-12 rounded-full relative overflow-hidden border-2 border-[#f0f4eb]">
+                                    <Image src={post.avatar} alt={post.author} fill className="object-cover" sizes="48px" />
+                                </div>
                                 <div>
                                     <h4 className="font-bold text-[#004d2b] flex items-center gap-2">
                                         {post.author}
@@ -126,7 +129,9 @@ export default function CommunityForum() {
 
                         {post.image && (
                             <div className="rounded-2xl overflow-hidden mb-5 border border-[#004d2b]/10 bg-[#f0f4eb]">
-                                <img src={post.image} alt="Farm update" className="w-full max-h-80 object-cover mix-blend-multiply" />
+                                <div className="relative w-full" style={{height: '20rem'}}>
+                                    <Image src={post.image} alt="Farm update" fill className="object-cover mix-blend-multiply" sizes="(max-width: 768px) 100vw, 50vw" />
+                                </div>
                             </div>
                         )}
 

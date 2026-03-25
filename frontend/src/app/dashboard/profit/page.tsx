@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calculator, IndianRupee, Sprout, TrendingUp } from 'lucide-react';
 
@@ -18,7 +19,7 @@ export default function ProfitCalculator() {
         <div className="max-w-5xl mx-auto space-y-6">
             {/* Banner Image Section */}
             <div className="relative w-full h-48 md:h-64 rounded-3xl overflow-hidden mb-8 shadow-xl border border-[#004d2b]/10">
-                <img src="/images/profit_banner.png" alt="Smart Profit Calculator Concept" className="w-full h-full object-cover" />
+                <Image src="/images/profit_banner.png" alt="Smart Profit Calculator Concept" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#004d2b] via-[#004d2b]/80 to-transparent flex flex-col justify-center px-8 md:px-12 backdrop-blur-sm">
                     <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight flex items-center mb-2">
                         <TrendingUp className="w-8 h-8 md:w-12 md:h-12 mr-4 text-[#a4e320]" />
