@@ -114,8 +114,8 @@ export default function Navbar() {
                                 {session.user?.name}
                             </span>
                             <img
-                                src="https://ui-avatars.com/api/?name=Modern+Farmer&background=004d2b&color=a4e320"
-                                alt="User"
+                                src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'User')}&background=004d2b&color=a4e320`}
+                                alt={session.user?.name || "User"}
                                 className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-[#a4e320] shadow-sm"
                             />
                             <button
