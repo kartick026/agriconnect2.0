@@ -13,16 +13,59 @@ You are an expert in farming, crop prices, weather, government schemes, soil hea
 export async function POST(request: NextRequest) {
     const { message, language } = await request.json();
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const groqKey = process.env.GROQ_API_KEY;
+    const geminiKey = process.env.GEMINI_API_KEY;
 
-    // Fallback to basic responses if no API key
-    if (!apiKey) {
-        return NextResponse.json({ reply: getFallbackReply(message, language) });
+    // Try Groq first (faster, higher free limits), then Gemini, then fallback
+    if (groqKey) {
+        const reply = await callGroq(groqKey, message, language);
+        if (reply) return NextResponse.json({ reply });
     }
 
+    if (geminiKey) {
+        const reply = await callGemini(geminiKey, message, language);
+        if (reply) return NextResponse.json({ reply });
+    }
+
+    return NextResponse.json({ reply: getFallbackReply(message, language) });
+}
+
+async function callGroq(apiKey: string, message: string, language: string): Promise<string | null> {
     try {
         const langHint = language && language !== 'en' ? `\nRespond in the language with code: ${language}` : '';
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'llama-3.3-70b-versatile',
+                messages: [
+                    { role: 'system', content: SYSTEM_PROMPT + langHint },
+                    { role: 'user', content: message }
+                ],
+                max_tokens: 300,
+                temperature: 0.7,
+            })
+        });
 
+        if (!res.ok) {
+            console.error('Groq API error:', res.status);
+            return null;
+        }
+
+        const data = await res.json();
+        return data?.choices?.[0]?.message?.content?.trim() || null;
+    } catch (error) {
+        console.error('Groq error:', error);
+        return null;
+    }
+}
+
+async function callGemini(apiKey: string, message: string, language: string): Promise<string | null> {
+    try {
+        const langHint = language && language !== 'en' ? `\nRespond in the language with code: ${language}` : '';
         const res = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
             {
@@ -32,26 +75,16 @@ export async function POST(request: NextRequest) {
                     contents: [
                         { role: 'user', parts: [{ text: `${SYSTEM_PROMPT}${langHint}\n\nUser: ${message}` }] }
                     ],
-                    generationConfig: {
-                        maxOutputTokens: 300,
-                        temperature: 0.7,
-                    }
+                    generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
                 })
             }
         );
 
-        if (!res.ok) {
-            console.error('Gemini API error:', res.status, await res.text());
-            return NextResponse.json({ reply: getFallbackReply(message, language) });
-        }
-
+        if (!res.ok) return null;
         const data = await res.json();
-        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || getFallbackReply(message, language);
-
-        return NextResponse.json({ reply: reply.trim() });
-    } catch (error) {
-        console.error('Chat API error:', error);
-        return NextResponse.json({ reply: getFallbackReply(message, language) });
+        return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+    } catch {
+        return null;
     }
 }
 
