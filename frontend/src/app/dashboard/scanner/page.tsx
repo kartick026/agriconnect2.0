@@ -14,7 +14,7 @@ export default function DiseaseScanner() {
 
         // Simulate API call to Vision AI
         setTimeout(() => {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/detect-disease`, { method: "POST" })
+            fetch(`/api/detect-disease`, { method: "POST" })
                 .then(res => res.json())
                 .then(data => {
                     setResult(data);

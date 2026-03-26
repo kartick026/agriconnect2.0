@@ -24,7 +24,7 @@ export default function Navbar() {
 
     useEffect(() => {
         // Fetch local weather from our backend
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/weather`)
+        fetch(`/api/weather`)
             .then((res) => res.json())
             .then((data) => setWeather(data))
             .catch((err) => console.error("Weather fetch error", err));

@@ -32,7 +32,7 @@ export default function DashboardHome() {
     const [trends, setTrends] = useState([] as { date: string, price: number }[]);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/trends`)
+        fetch(`/api/trends`)
             .then(res => res.json())
             .then(data => setTrends(data))
             .catch(err => console.error(err));
