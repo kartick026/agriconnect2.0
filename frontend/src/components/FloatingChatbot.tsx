@@ -8,12 +8,42 @@ import { useTranslation } from 'react-i18next';
 export default function FloatingChatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const { t, i18n } = useTranslation();
-    const [messages, setMessages] = useState<{ id: string; sender: 'bot' | 'user'; text: string }[]>([
-        { id: '1', sender: 'bot', text: 'Namaste! I am AgriBot. How can I help you today?' }
+    const [messages, setMessages] = useState<{ id: number; text: string; sender: 'user' | 'bot' }[]>([
+        { id: 1, text: t('chat.welcome', 'I am your AgriConnect assistant. How can I help you today?'), sender: 'bot' },
     ]);
     const [inputText, setInputText] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [isListening, setIsListening] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Initialize Speech Recognition
+    const startListening = () => {
+        const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support voice input.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = i18n.language === 'hi' ? 'hi-IN' : 'en-IN';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => setIsListening(true);
+        
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setInputText(transcript);
+        };
+
+        recognition.onend = () => setIsListening(false);
+        recognition.onerror = (event: any) => {
+            console.error("Speech recognition error", event.error);
+            setIsListening(false);
+        };
+
+        recognition.start();
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -24,7 +54,7 @@ export default function FloatingChatbot() {
     const handleSend = async () => {
         if (!inputText.trim()) return;
 
-        const userMsg = { id: Date.now().toString(), sender: 'user' as const, text: inputText };
+        const userMsg = { id: Date.now(), sender: 'user' as const, text: inputText };
         setMessages(prev => [...prev, userMsg]);
         setInputText('');
         setIsTyping(true);
@@ -40,12 +70,12 @@ export default function FloatingChatbot() {
 
             setTimeout(() => {
                 setIsTyping(false);
-                setMessages(prev => [...prev, { id: Date.now().toString(), sender: 'bot', text: data.reply }]);
+                setMessages(prev => [...prev, { id: Date.now(), sender: 'bot', text: data.reply }]);
             }, 500);
 
         } catch (error) {
             setIsTyping(false);
-            setMessages(prev => [...prev, { id: Date.now().toString(), sender: 'bot', text: 'Sorry, I am offline.' }]);
+            setMessages(prev => [...prev, { id: Date.now(), sender: 'bot', text: 'Sorry, I am offline.' }]);
         }
     };
 
@@ -73,7 +103,7 @@ export default function FloatingChatbot() {
                                     onChange={(e) => {
                                         i18n.changeLanguage(e.target.value);
                                         const langName = e.target.options[e.target.selectedIndex].text;
-                                        setMessages((prev) => [...prev, { id: Date.now().toString(), sender: 'bot', text: `Language changed to ${langName}. How can I assist you?` }]);
+                                        setMessages((prev) => [...prev, { id: Date.now(), sender: 'bot', text: `Language changed to ${langName}. How can I assist you?` }]);
                                     }}
                                     className="bg-white/20 border border-white/30 text-white text-xs rounded-md px-2 py-1 outline-none cursor-pointer"
                                 >
@@ -114,8 +144,12 @@ export default function FloatingChatbot() {
 
                         {/* Input */}
                         <div className="p-4 bg-white border-t border-[#004d2b]/10 shrink-0 flex space-x-2">
-                            <button className="p-2.5 text-[#004d2b]/50 hover:text-[#004d2b] bg-[#f0f4eb] rounded-xl transition-colors">
-                                <Mic className="w-5 h-5" />
+                            <button
+                                type="button"
+                                onClick={startListening}
+                                className={`p-2 rounded-full transition-colors ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'text-gray-400 hover:text-green-600 hover:bg-green-50'}`}
+                            >
+                                <Mic size={20} />
                             </button>
                             <input
                                 type="text"
