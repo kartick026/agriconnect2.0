@@ -157,7 +157,7 @@ export default function FloatingChatbot() {
                                 onChange={(e) => setInputText(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                                 placeholder="Ask me anything..."
-                                className="flex-1 bg-[#f0f4eb] border-transparent rounded-xl px-4 py-2.5 text-sm text-[#004d2b] font-medium focus:outline-none focus:ring-2 focus:ring-[#004d2b] placeholder-[#004d2b]/40 outline-none"
+                                className="flex-1 bg-[#f0f4eb] border-transparent rounded-xl px-4 py-2.5 text-sm text-black font-medium focus:outline-none focus:ring-2 focus:ring-[#004d2b] placeholder-[#004d2b]/40 outline-none"
                             />
                             <button
                                 onClick={handleSend}
