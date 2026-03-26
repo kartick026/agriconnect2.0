@@ -22,6 +22,7 @@ export default function Sidebar() {
 
     const links = [
         { name: t('Dashboard') || 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={20} /> },
+        { name: t('Weather') || 'Weather Forecast', href: '/dashboard/weather', icon: <CloudRain size={20} /> },
         { name: t('Prices') || 'Compare Prices', href: '/dashboard/prices', icon: <Activity size={20} /> },
         { name: t('Profit') || 'Profit Calculator', href: '/dashboard/profit', icon: <Calculator size={20} /> },
         { name: t('Community') || 'Community Forum', href: '/dashboard/community', icon: <Users size={20} /> },
