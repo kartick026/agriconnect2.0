@@ -18,7 +18,7 @@ export default function FloatingChatbot() {
 
     // Initialize Speech Recognition
     const startListening = () => {
-        const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
             alert("Your browser does not support voice input.");
             return;
