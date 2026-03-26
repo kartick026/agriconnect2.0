@@ -30,21 +30,22 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS – allow requests from the frontend origin
+// CORS – allow all origins in development, restrict in production
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://agriconnect2-0-38pk.onrender.com',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, curl, etc.)
+        // Allow requests with no origin (health checks, curl, etc.)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            return callback(null, true);
+        // If FRONTEND_URL is set, enforce origin whitelist
+        if (process.env.FRONTEND_URL && allowedOrigins.indexOf(origin) === -1) {
+            return callback(new Error('Not allowed by CORS'));
         }
-        return callback(new Error('Not allowed by CORS'));
+        // In development (no FRONTEND_URL set), allow all origins
+        return callback(null, true);
     },
     credentials: true
 }));
